@@ -10,6 +10,8 @@ class Post extends Model
 {
     use HasFactory;
 
+    // protected $dates = ['published_at'];
+
     /**
      * The attributes that are mass assignable.
      *

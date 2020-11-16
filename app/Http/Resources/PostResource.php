@@ -17,7 +17,7 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'image' => url(config('blog.uploads.webpath') . '/' . $this->thumbnail),
+            'image' => $this->thumbnail ? url(config('blog.uploads.webpath') . '/' . $this->thumbnail) : '',
             'content' => $this->content,
             'author' => 'Athellow',
             'published_at' => $this->published_at,
