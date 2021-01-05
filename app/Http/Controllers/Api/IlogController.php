@@ -50,7 +50,7 @@ class IlogController extends Controller
             ];
         }else{
             $data = [
-                'status' => '1',
+                'status' => 1,
                 'data' => '',
                 'msg' => '发布失败'
             ];

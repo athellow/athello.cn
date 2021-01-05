@@ -30,7 +30,7 @@ class Ilog extends Model
         $image_urls = [];
         
         foreach($images as $image) {
-            $image_urls[] = url(config('blog.uploads.webpath') . '/' . $image);
+            $image_urls[] = url(config('blog.uploads.webpath') . '/storage/' . $image);
         }
 
         return $image_urls;
