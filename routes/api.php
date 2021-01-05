@@ -21,4 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('throttle:60,1')->prefix('v1')->group(function($router) {
     Route::get('/posts', 'Api\PostController@index');
     Route::get('/post/{id}', 'Api\PostController@detail')->where(['id' => '[1-9]{1}[0-9]*']);
+
+    Route::get('/ilogs', 'Api\IlogController@index');
+    Route::post('/ilogs', 'Api\IlogController@store');
+    Route::get('/ilog/{id}', 'Api\IlogController@detail')->where(['id' => '[1-9]{1}[0-9]*']);
+
+    Route::post('/upload', 'Api\UploadController@do')->name('upload.do');
 });
