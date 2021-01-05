@@ -16,7 +16,7 @@ class IlogController extends Controller
 
         $data = [
             'status' => 0,
-            'data' => $list
+            'data' => $list->items()
         ];
 
         return response()->json($data);
