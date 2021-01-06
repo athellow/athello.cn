@@ -66,7 +66,7 @@ class UserController extends Controller
                     ]);
                 }
 
-                $token = $this->getToken(32, mktime());
+                $token = $this->getToken(32, time());
                 //存入数据库
                 $result = User::updateOrCreate(
                     ['openid' => $openid],
