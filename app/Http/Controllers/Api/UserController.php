@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $cocde = $request->input('code');
+        $code = $request->input('code');
 
         if ($code != '') {
             $appid = config('main.wechat.appid');
