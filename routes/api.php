@@ -26,5 +26,7 @@ Route::middleware('throttle:60,1')->prefix('v1')->group(function($router) {
     Route::post('/ilogs', 'Api\IlogController@store');
     Route::get('/ilog/{id}', 'Api\IlogController@detail')->where(['id' => '[1-9]{1}[0-9]*']);
 
+    Route::get('/user', 'Api\UserController@index');
+
     Route::post('/upload', 'Api\UploadController@do')->name('upload.do');
 });
