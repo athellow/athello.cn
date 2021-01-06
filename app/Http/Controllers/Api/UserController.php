@@ -66,7 +66,7 @@ class UserController extends Controller
                     ]);
                 }
 
-                $token = mt_srand();
+                $token = $this->getToken(32, mktime());
                 //存入数据库
                 $result = User::updateOrCreate(
                     ['openid' => $openid],
@@ -105,5 +105,20 @@ class UserController extends Controller
                 'msg' => 'code为空'
             ]);
         }
+    }
+
+    private function getToken($length, $seed){    
+        $token = "";
+        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $codeAlphabet.= "0123456789";
+
+        mt_srand($seed);      // Call once. Good since $application_id is unique.
+
+        $length -= 4;
+        for($i=0;$i<$length;$i++){
+            $token .= $codeAlphabet[mt_rand(0,strlen($codeAlphabet)-1)];
+        }
+
+        return 'MK'. $token. substr(strftime("%Y", time()),2);
     }
 }
