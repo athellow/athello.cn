@@ -13,9 +13,13 @@ class UserController extends Controller
         $cocde = $request->input('code');
 
         $data = [
-            'user_id' => 1,
-            'session_key' => 'a'.$cocde
+            'status' => 0,
+            'data' => [
+                'user_id' => 1,
+                'session_key' => 'a'.$cocde
+            ]
         ];
+        
         return response()->json($data);
     }
 }
