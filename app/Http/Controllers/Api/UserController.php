@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 use App\Services\WXBizDataCrypt;
 
 class UserController extends Controller
@@ -41,8 +42,8 @@ class UserController extends Controller
                 // 获取用户信息失败
                 return $html;
             }else{
-
-                $arrlist = ['openid' => $obj->openid, 'session_key' => $obj->session_key];
+                $openid = $obj->openid;
+                $session_key = $obj->session_key;
                 
                 /**
                  * 解密用户敏感数据
@@ -52,19 +53,11 @@ class UserController extends Controller
                  * @param code          用户允许登录后，回调内容会带上 code（有效期五分钟），开发者需要将 code 发送到开发者服务器后台，使用code 换取 session_key api，将 code 换成 openid 和 session_key
                  * @return
                  */
-
-                $pc = new WXBizDataCrypt($appid, $arrlist['session_key']);
+                $pc = new WXBizDataCrypt($appid, $session_key);
 
                 $errCode = $pc->decryptData($encryptedData, $iv, $data);
                 $data  = json_decode($data);//$data 包含用户所有基本信息
-                $arrlist['time'] = time();
-                $arrlist['city'] = $data->city;//城市-市
-                $arrlist['country'] = $data->country;//国家
-                $arrlist['gender'] = $data->gender;//性别
-                $arrlist['language'] = $data->language;//语言
-                $arrlist['nickName'] = $data->nickName;//昵称
-                $arrlist['avatarUrl'] = $data->avatarUrl;//头像
-                $arrlist['province'] = $data->province;//城市-省份
+                
                 //判断获取信息是否成功
                 if ($errCode != 0) {
                     return response()->json([
@@ -72,13 +65,39 @@ class UserController extends Controller
                         'msg' => $errCode
                     ]);
                 }
-                //存入数据库
-                
 
-                return response()->json([
-                    'status' => 0,
-                    'data' => $data
-                ]);
+                $token = mt_srand();
+                //存入数据库
+                $result = User::updateOrCreate(
+                    ['openid' => $openid],
+                    ['wechat_name' => $data->nickName, 'wechat_avatar' => $data->avatarUrl, 'token' => $token]
+                );
+                
+                
+                if ($result){
+                    $data = [
+                        'status' => 0,
+                        'data' => [
+                            'city' => $data->city,
+                            'country' => $data->country,
+                            'gender' => $data->gender,
+                            'language' => $data->language,
+                            'nickName' => $data->nickName,
+                            'avatarUrl' => $data->avatarUrl,
+                            'province' => $data->province,
+                            'token' => $token,
+                            'result' => $result
+                        ]
+                    ];
+                }else{
+                    $data = [
+                        'status' => 1,
+                        'data' => '',
+                        'msg' => '登录失败'
+                    ];
+                }
+                
+                return response()->json($data);
             }
         }else{
             return response()->json([
