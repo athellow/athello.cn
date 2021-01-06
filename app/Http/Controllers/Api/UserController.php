@@ -86,7 +86,7 @@ class UserController extends Controller
                             'avatarUrl' => $data->avatarUrl,
                             'province' => $data->province,
                             'token' => $token,
-                            'result' => $result
+                            'user_id' => $result->id
                         ]
                     ];
                 }else{
