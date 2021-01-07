@@ -62,7 +62,7 @@ class UserController extends Controller
                 if ($errCode != 0) {
                     return response()->json([
                         'status' => 1,
-                        'msg' => $errCode
+                        'msg' => (string)$errCode
                     ]);
                 }
 
