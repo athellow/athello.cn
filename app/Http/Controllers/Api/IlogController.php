@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ilog;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -12,7 +13,12 @@ class IlogController extends Controller
 
     public function index(Request $request)
     {
-        $list = Ilog::where('is_draft', 0)->orderBy('published_at', 'desc')->simplePaginate(5);
+        $user_id = $request->input('user_id');
+
+        $user = User::find($user_id);
+        $list = $user->ilogs()->where('is_draft', 0)->get()->orderBy('published_at', 'desc')->simplePaginate(5);
+
+        // $list = Ilog::where(['user_id' => $user_id, 'is_draft' => 0])->orderBy('published_at', 'desc')->simplePaginate(5);
 
         $data = [
             'status' => 0,
