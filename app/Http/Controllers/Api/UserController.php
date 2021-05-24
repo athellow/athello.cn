@@ -107,7 +107,8 @@ class UserController extends Controller
         }
     }
 
-    private function getToken($length, $seed){    
+    private function getToken($length, $seed)
+    {    
         $token = "";
         $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $codeAlphabet.= "0123456789";
